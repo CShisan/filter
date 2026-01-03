@@ -1,6 +1,7 @@
 package com.filter;
 
 import com.filter.client.model.MarkMeta;
+import com.filter.common.utils.TagHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -32,6 +33,20 @@ final class FilterPlayerData {
         }
         metas.removeIf(meta -> meta.tag() == isTag && meta.id().equals(id));
         write(player, metas);
+    }
+
+    static boolean isMarkedWithTags(ServerPlayer player, ResourceLocation id) {
+        List<MarkMeta> metas = read(player);
+        if (isMarked(read(player), id)) {
+            return true;
+        }
+        List<ResourceLocation> tags = TagHelper.item2tags(id);
+        for (ResourceLocation tag : tags) {
+            if (isMarked(metas, tag)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     static boolean isMarked(ServerPlayer player, ResourceLocation id) {

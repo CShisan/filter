@@ -1,16 +1,15 @@
 package com.filter.client.component;
 
 import com.filter.client.FilterClientState;
+import com.filter.common.utils.TagHelper;
 import com.mojang.blaze3d.vertex.Tesselator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.narration.NarratedElementType;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -18,9 +17,7 @@ import net.neoforged.neoforge.client.gui.widget.ScrollPanel;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 @OnlyIn(Dist.CLIENT)
 final class FilterTags extends ScrollPanel implements FilterComponent, FilterScrollText {
@@ -142,13 +139,7 @@ final class FilterTags extends ScrollPanel implements FilterComponent, FilterScr
             this.ensureSelectedVisible();
             if (this.tags.isEmpty()) {
                 ResourceLocation key = BuiltInRegistries.ITEM.getKey(stack.getItem());
-                List<ResourceLocation> tags = new ArrayList<>();
-                Optional<Holder.Reference<Item>> holder = BuiltInRegistries.ITEM.getHolder(key);
-                holder.ifPresent(item -> item.tags().forEach(
-                        tagKey -> tags.add(tagKey.location())
-                ));
-                tags.sort(Comparator.comparing(ResourceLocation::toString));
-                this.setTags(tags);
+                this.setTags(TagHelper.item2tags(key));
             }
         } else {
             this.tags.clear();

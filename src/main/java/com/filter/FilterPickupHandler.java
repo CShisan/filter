@@ -15,7 +15,7 @@ final class FilterPickupHandler {
         }
         if (!stack.isEmpty()) {
             ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
-            if (FilterPlayerData.isMarked(player, id)) {
+            if (FilterPlayerData.isMarkedWithTags(player, id)) {
                 event.setCanPickup(TriState.FALSE);
             }
         }
